@@ -6,7 +6,7 @@ USER root
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
-ENV DEBIAN_FRONTEND=noninteractive \
+ARG DEBIAN_FRONTEND=noninteractive \
     PYTHON_VERSION="3.8"
 
 WORKDIR /tmp
@@ -25,7 +25,7 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         intel-mkl-2019.5-075 && \
-    apt-get purge \
+    apt-get purge -y \
         gpg-agent \
         software-properties-common && \
     apt-get clean && \
@@ -68,7 +68,7 @@ RUN apt-get update && \
         USE_INTEL_PATH=/opt/intel/ && \
     cd python && \
     python setup.py install && \
-    apt-get purge \
+    apt-get purge -y \
         build-essential \
         python${PYTHON_VERSION}-dev \
         python${PYTHON_VERSION}-distutils && \
