@@ -55,12 +55,16 @@ RUN apt-get update && \
 ENV LD_LIBRARY_PATH=/opt/intel/lib/intel64_lin:$LD_LIBRARY_PATH
 
 # Install MXNet
+ARG MXNET_VER=1.7.0
 RUN python${PYTHON_VERSION} -m pip install --ignore-installed --no-cache-dir \
         cmake && \
-    git clone https://github.com/apache/incubator-mxnet.git && \
+    git clone \
+        --depth 1 \
+        --single-branch \
+        -b ${MXNET_VER} \
+        https://github.com/apache/incubator-mxnet.git && \
     cd incubator-mxnet && \
-    git checkout 6ae469a17ebe517325cdf6acdf0e2a8b4d464734 && \
-    git submodule update --init && \
+    git submodule update --init --recursive && \
     make -j 2 \
         USE_OPENCV=0 \
         USE_MKLDNN=1 \
